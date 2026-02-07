@@ -38,3 +38,27 @@ def read_line(path: str) -> list[str]:
     """
     with open(path, "r", encoding="utf-8") as f:
         return f.readlines()
+    
+def parse_file(path:str) -> LogEntry:
+    entries: list[LogEntry] = []
+    skipped = 0
+
+    lines = read_line(path)
+    for line in lines:
+        if parse_line(line)==None:
+            skipped+1
+        else:
+            entries.append(parse_line(line))
+    return entries, skipped
+
+from collections import Counter
+
+def count_levels(entries: list[LogEntry]) -> dict[str, int]:
+    """
+    Count log entries by severity level
+    
+    :return: Description
+    """
+    levels = (entry.level for entry in entries)
+
+    return dict(Counter(levels))
